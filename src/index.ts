@@ -1,29 +1,27 @@
 import { CsvFileReader } from './CsvFileReader';
 import { MatchReader } from './MatchReader';
-import { MatchResult } from './MatchResult';
+import { ConsoleReport } from './reportTarget/ConsoleReport';
+import { WinsAnalysis } from './analyzers/WinsAnalysis';
+import { Summary } from './Summary';
 
 // create an object that satisfies the 'DataReader' interface
 const csvFileReader = new CsvFileReader('football.csv');
 // Create an instance of MatchReader and pass in something satisfying the 'DataReader' interface
 const matchReader = new MatchReader(csvFileReader);
 matchReader.load();
-// matchReader.matches
+// matchReader.matches - array of matchData tuples
 
-// const reader = new MatchReader('football.csv');
-// reader.read();
-// console.log(reader.data[0][0]);
+const summary = new Summary(
+  // instance of analysis and console report
+  new WinsAnalysis('Man United'),
+  new ConsoleReport()
+)
+
+summary.buildAndPrintReport(matchReader.matches);
 
 
-// use enums when aware of a small set of possible values
 
-let manUnitedWins = 0;
-for (let match of matchReader.matches) {
-  if (match[1]  === 'Man United' && match[5] === MatchResult.HomeWin) {
-    manUnitedWins++;
-  } else if (match[2] === 'Man United' && match[5] === MatchResult.AwayWin) {
-    manUnitedWins++;
-  }
-}
 
-// report
-console.log(`Man United won ${manUnitedWins} games`);
+
+
+
